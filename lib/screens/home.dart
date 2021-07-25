@@ -4,7 +4,6 @@ import 'package:whatsapp/bloc/chatlist/chat_list_cubit.dart';
 import 'package:whatsapp/repository/inbox_repository.dart';
 import 'package:whatsapp/screens/chat_list.dart';
 import 'package:whatsapp/screens/contact_list.dart';
-import 'package:whatsapp/screens/login.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -78,7 +77,9 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
             backgroundColor: Theme.of(context).accentColor,
             onPressed: () {
               Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => ContactList())
+                MaterialPageRoute(
+                    builder: (context) => ContactListContainer()
+                )
               );
             },
             child: isCallPage? Icon(Icons.add_call, color: Colors.white,) : Icon(Icons.message, color: Colors.white,),
