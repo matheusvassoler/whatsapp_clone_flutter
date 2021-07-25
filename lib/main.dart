@@ -14,6 +14,7 @@ class Whatsapp extends StatelessWidget {
     return MaterialApp(
       theme: ThemeData(
         primaryColor: Color(0xFF075E54),
+        accentColor: Color(0xFF2CB864),
         indicatorColor: Colors.white,
       ),
       home: Login(),
