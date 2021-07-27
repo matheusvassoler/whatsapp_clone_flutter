@@ -5,6 +5,7 @@ class Inbox {
   String dateOfLastMessage;
   String receiptName;
   String picture;
+  String receiptNumber;
 
   Inbox(
       {this.id,
@@ -12,7 +13,8 @@ class Inbox {
         this.hashCodeId,
         this.dateOfLastMessage,
         this.receiptName,
-        this.picture});
+        this.picture,
+        this.receiptNumber});
 
   Inbox.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -21,6 +23,7 @@ class Inbox {
     dateOfLastMessage = json['dateOfLastMessage'];
     receiptName = json['receiptName'];
     picture = json["pictureInbox"];
+    receiptNumber = json["receiptNumber"];
   }
 
   Map<String, dynamic> toJson() {
@@ -31,6 +34,7 @@ class Inbox {
     data['dateOfLastMessage'] = this.dateOfLastMessage;
     data['receiptName'] = this.receiptName;
     data['pictureInbox'] = this.picture;
+    data['receiptNumber'] = this.receiptNumber;
     return data;
   }
 }

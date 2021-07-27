@@ -69,7 +69,7 @@ class ContactListView extends StatelessWidget {
                 ),
                 onTap: () {
                   Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => ChatRoom())
+                      MaterialPageRoute(builder: (context) => ChatRoomContainer(state.contactList[index].name, state.contactList[index].picture, state.contactList[index].phone))
                   );
                 },
               );

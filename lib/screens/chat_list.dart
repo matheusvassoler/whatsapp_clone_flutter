@@ -7,8 +7,6 @@ import 'package:whatsapp/screens/chat_room.dart';
 class ChatList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    ChatListCubit chatListCubit = context.read<ChatListCubit>();
-    var a = chatListCubit.getChatList();
     return BlocBuilder<ChatListCubit, ChatListState>(
       builder: (context, state) {
         if (state is ChatLoaded) {
@@ -78,13 +76,14 @@ class ChatList extends StatelessWidget {
                                   Divider(height: 1,)
                                 ],
                               ),
-                            ))
+                            ),
+                        ),
                       ],
                     ),
                   ),
                     onTap: () {
                       Navigator.of(context).push(
-                          MaterialPageRoute(builder: (context) => ChatRoom())
+                          MaterialPageRoute(builder: (context) => ChatRoomContainer(state.chatList[index].receiptName, state.chatList[index].picture, state.chatList[index].receiptNumber))
                       );
                     }
                 ),
@@ -92,7 +91,7 @@ class ChatList extends StatelessWidget {
             );
           });
         } else {
-          return Text("Carregando");
+          return Container();
         }
       }
     );

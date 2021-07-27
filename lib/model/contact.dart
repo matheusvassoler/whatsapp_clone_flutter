@@ -1,7 +1,7 @@
 class Contact {
-  String phone;
-  String name;
-  String picture;
+  String phone = "";
+  String name = "";
+  String picture = "";
 
   Contact(
       {this.phone,
