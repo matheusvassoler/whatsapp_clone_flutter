@@ -28,6 +28,9 @@ dependencies:
   retrofit:
   logger:
   intl:
+  get_it:
+  dartz:
+  shared_preferences:
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -37,6 +40,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  mockito:
   retrofit_generator:
   build_runner:
 

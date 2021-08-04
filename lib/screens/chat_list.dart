@@ -7,6 +7,8 @@ import 'package:whatsapp/screens/chat_room.dart';
 class ChatList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    ChatListCubit chatListCubit = context.read<ChatListCubit>();
+    chatListCubit.getChatList();
     return BlocBuilder<ChatListCubit, ChatListState>(
       builder: (context, state) {
         if (state is ChatLoaded) {
