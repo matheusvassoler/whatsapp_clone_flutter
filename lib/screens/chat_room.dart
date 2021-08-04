@@ -1,7 +1,12 @@
+import 'dart:async';
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
+import 'package:stomp_dart_client/stomp.dart';
+import 'package:stomp_dart_client/stomp_config.dart';
 import 'package:whatsapp/bloc/message/message_cubit.dart';
 import 'package:whatsapp/model/message.dart';
 import 'package:whatsapp/repository/message_repository.dart';
@@ -22,29 +27,87 @@ class ChatRoomContainer extends StatelessWidget {
   }
 }
 
-class ChatRoomView extends StatelessWidget {
+class ChatRoomView extends StatefulWidget {
   final String _receiptContactName;
   final String _profileImage;
   final String _receiptNumber;
-  final TextEditingController _txtMessageController = TextEditingController();
 
   ChatRoomView(this._receiptContactName, this._profileImage, this._receiptNumber);
 
   @override
-  Widget build(BuildContext context) {
+  _ChatRoomViewState createState() => _ChatRoomViewState();
+}
+
+class _ChatRoomViewState extends State<ChatRoomView> {
+  final TextEditingController _txtMessageController = TextEditingController();
+  StompClient stompClient;
+  List<Message> messages = [];
+  MessageCubit messageCubit;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
     MessageCubit messageCubit = context.read<MessageCubit>();
-    messageCubit.getMessages(_receiptNumber);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    stompClient = StompClient(
+        config: StompConfig(
+            url: 'ws://192.168.15.93:8080/socket',
+            onConnect: (frame) {
+              print("Success connection");
+              stompClient.subscribe(destination: '/chat-room/1', callback: onMessageReceivedList);
+              stompClient.subscribe(destination: '/chat-room/1/message', callback: onMessageReceived);
+              stompClient.send(destination: "/chat-app/chat/1/addUser", headers: {"sender": "19111111111", "receipt": "19222222222"});
+            },
+            onWebSocketError: (dynamic error) => print(error.toString()),
+            onWebSocketDone: () {
+              print("Connection finished");
+            }
+        )
+    );
+    stompClient.activate();
+
+    // stompClient.send(destination: "/chat-app/chat/1/addUser", headers: {"sender": "19111111111", "receipt": "19222222222"});
+  }
+
+  onMessageReceivedList(payload) {
+    var teste = jsonDecode(payload.body);
+    messages = (teste as List).map((item) => Message.fromJson(item)).toList();
+    print(messages);
+    print('hjhjjhjjhj');
+    setState(() {
+
+    });
+  }
+
+  onMessageReceived(payload) {
+    var message = jsonDecode(payload.body);
+    print(message);
+    print('efdddf');
+    setState(() {
+      messages.insert(0, Message.fromJson(message));
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    //MessageCubit messageCubit = context.read<MessageCubit>();
+    //messageCubit.getMessages(widget._receiptNumber);
+    //messageCubit.teste(messages);
     return Scaffold(
       appBar: AppBar(
         title: Row(
           children: <Widget>[
             CircleAvatar(
-              backgroundImage: NetworkImage(_profileImage),
+              backgroundImage: NetworkImage(widget._profileImage),
             ),
             SizedBox(
               width: 8.0,
             ),
-            Text(_receiptContactName)
+            Text(widget._receiptContactName)
           ],
         ),
         actions: [
@@ -71,23 +134,15 @@ class ChatRoomView extends StatelessWidget {
         child: Column(
           children: [
             Expanded(
-                child: BlocBuilder<MessageCubit, MessageState>(
-                  builder: (context, state) {
-                    if (state is MessageLoaded) {
-                      return ListView.builder(
+                      child: ListView.builder(
                         itemBuilder: (context, index) {
-                          return ChatMessage(state.messages, index);
+                          return ChatMessage(messages, index, widget._receiptNumber);
                         },
                         reverse: true,
-                        itemCount: state.messages.length,
-                      );
-                    } else {
-                      return Container();
-                    }
-                  },
-                )
+                        itemCount: messages.length,
+                      )
             ),
-            _buildTextComposer(context, messageCubit, _receiptNumber),
+            _buildTextComposer(context, messageCubit, widget._receiptNumber),
           ],
         ),
       ),
@@ -126,7 +181,7 @@ class ChatRoomView extends StatelessWidget {
                     icon: Icon(Icons.send),
                     color: Colors.white,
                     onPressed: () => {
-                      _handleSendMessageButton(messageCubit, _txtMessageController.text, "19111111111", _receiptNumber)
+                      _handleSendMessageButton(messageCubit, _txtMessageController.text, "19111111111", widget._receiptNumber)
                     },
                 ),
                 backgroundColor: Theme.of(context).primaryColor,
@@ -140,15 +195,28 @@ class ChatRoomView extends StatelessWidget {
 
   void _handleSendMessageButton(MessageCubit messageCubit, String content, String senderNumber, String receiptNumber) {
       _txtMessageController.clear();
-      messageCubit.sendMessage(content, senderNumber, receiptNumber);
+      final Map<String, dynamic> data = new Map<String, dynamic>();
+      data["content"] = content;
+      data["senderNumber"] = senderNumber;
+      data["receiptNumber"] = receiptNumber;
+      final String messageJson = jsonEncode(data);
+      //messageCubit.sendMessage(content, senderNumber, receiptNumber);
+    stompClient.send(destination: '/chat-app/chat/1/sendMessage', headers: {}, body: messageJson);
     }
+
+  @override
+  void dispose() {
+    super.dispose();
+    stompClient.deactivate();
+  }
 }
 
 class ChatMessage extends StatelessWidget {
   final List<Message> messages;
   final int index;
+  final String receiptNumber;
 
-  ChatMessage(this.messages, this.index);
+  ChatMessage(this.messages, this.index, this.receiptNumber);
 
   @override
   Widget build(BuildContext context) {
@@ -168,9 +236,10 @@ class ChatMessage extends StatelessWidget {
               ),
         ),
         Align(
-          alignment: (messages[index].sender.phone == '19333333333' ? Alignment.topLeft : Alignment.topRight),
+          //Comparar telefone do sender com o telefone do receipt. Exemplo: messages[index].sender.phone == messages[index].receipt.phone
+          alignment: (messages[index].sender.phone == receiptNumber ? Alignment.topLeft : Alignment.topRight),
           child: Container(
-            margin: messages[index].sender.phone == '19333333333' ? EdgeInsets.only(top: 8.0, bottom: 8.0, right: 80.0, left: 20.0) : EdgeInsets.only(top: 0, bottom: 0, left: 80.0, right: 20.0),
+            margin: messages[index].sender.phone == receiptNumber ? EdgeInsets.only(top: 0, bottom: 0, right: 80.0, left: 20.0) : EdgeInsets.only(top: 0, bottom: 0, left: 80.0, right: 20.0),
             child: Card(
               child: Padding(
                 padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
@@ -190,7 +259,7 @@ class ChatMessage extends StatelessWidget {
                 ),
               ),
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-              color: (messages[index].sender.phone == '19333333333' ? Colors.white : Color(0xFFDCF8C6)),
+              color: (messages[index].sender.phone == receiptNumber ? Colors.white : Color(0xFFDCF8C6)),
               elevation: 0.5,
             ),
           ),
@@ -229,6 +298,8 @@ class ChatMessage extends StatelessWidget {
           var nextMessageDate = DateFormat.yMd().format(nextParseDate.toLocal());
 
           if(actualMessageDate.compareTo(nextMessageDate) != 0) {
+            dateString = _checkIfMessageWasSentToday(nextMessageDate, dateString, nextParseDate);
+          } else {
             dateString = _checkIfMessageWasSentToday(nextMessageDate, dateString, nextParseDate);
           }
         }

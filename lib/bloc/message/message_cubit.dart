@@ -19,4 +19,8 @@ class MessageCubit extends Cubit<MessageState> {
     await _messageRepository.sendMessage(content, senderNumber, receiptNumber);
     getMessages(receiptNumber);
   }
+
+  Future<void> teste(List<Message> messages) async {
+    emit(MessageLoaded(messages));
+  }
 }
