@@ -2,7 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:whatsapp/core/error/exceptions.dart';
 import 'package:whatsapp/core/error/failure.dart';
-import 'package:whatsapp/core/platform/network_info.dart';
+import 'package:whatsapp/core/network/network_info.dart';
 import 'package:whatsapp/features/inbox_message/data/datasources/inbox_local_data_source.dart';
 import 'package:whatsapp/features/inbox_message/data/datasources/inbox_remote_data_source.dart';
 import 'package:whatsapp/features/inbox_message/domain/entities/inbox.dart';
