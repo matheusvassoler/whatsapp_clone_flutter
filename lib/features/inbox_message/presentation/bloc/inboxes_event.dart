@@ -3,8 +3,8 @@ part of 'inboxes_bloc.dart';
 @immutable
 abstract class InboxesEvent {}
 
-class GetInboxes extends InboxesEvent {
+class GetInboxList extends InboxesEvent {
   final String inboxOwnerPhone;
 
-  GetInboxes(this.inboxOwnerPhone);
+  GetInboxList(this.inboxOwnerPhone);
 }

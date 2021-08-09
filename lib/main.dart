@@ -3,7 +3,10 @@ import 'package:whatsapp/screens/chat_room.dart';
 import 'package:whatsapp/screens/home.dart';
 import 'package:whatsapp/screens/login.dart';
 
-void main() {
+import 'injection_container.dart';
+
+void main() async {
+  await init();
   runApp(Whatsapp());
 }
 
