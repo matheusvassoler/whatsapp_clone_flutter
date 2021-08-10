@@ -59,6 +59,7 @@ flutter:
      - images/b107f44d7bb7bf8abcf58afd9df500de.jpg
      - images/b107f44d7bb7bf8abcf58afd9df500de.png
      - images/chat_room_background.png
+     - images/whatsapp_welcome_screen_icon.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
