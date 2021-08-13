@@ -4,9 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:whatsapp/core/app_colors.dart';
 import 'package:whatsapp/core/strings.dart';
 import 'package:whatsapp/features/welcome/presentation/blocs/external_link/external_link_cubit.dart';
-
-const _privacyPolicyLink = 'https://www.whatsapp.com/legal/privacy-policy';
-const _termsOfServiceLink = 'https://www.whatsapp.com/legal/terms-of-service';
+import 'package:whatsapp/features/welcome/presentation/widgets/facebook_brand_container.dart';
+import 'package:whatsapp/features/welcome/presentation/common-android-ios/welcome_page_constants.dart';
 
 class WelcomePageAndroid extends StatelessWidget {
   const WelcomePageAndroid({Key key}) : super(key: key);
@@ -75,7 +74,9 @@ class WelcomePageAndroid extends StatelessWidget {
                                             color: Color(AppColors.blue)),
                                         recognizer:
                                             _createGestureToOpenExternalLinkOnTextSpan(
-                                                context, _privacyPolicyLink),
+                                                context,
+                                                WelcomePageConstants
+                                                    .privacyPolicyLink),
                                       ),
                                       TextSpan(
                                         text: Strings.welcomePageAgreeAndroid,
@@ -86,7 +87,9 @@ class WelcomePageAndroid extends StatelessWidget {
                                             color: Color(AppColors.blue)),
                                         recognizer:
                                             _createGestureToOpenExternalLinkOnTextSpan(
-                                                context, _termsOfServiceLink),
+                                                context,
+                                                WelcomePageConstants
+                                                    .termsOfServiceLink),
                                       )
                                     ],
                                   ),
@@ -99,7 +102,8 @@ class WelcomePageAndroid extends StatelessWidget {
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 20.0, vertical: 12.0),
                                       child: Text(
-                                        Strings.welcomePageAgreeAndContinueAndroid
+                                        Strings
+                                            .welcomePageAgreeAndContinueAndroid
                                             .toUpperCase(),
                                         style: TextStyle(color: Colors.white),
                                       ),
@@ -112,7 +116,9 @@ class WelcomePageAndroid extends StatelessWidget {
                                         ),
                                       ),
                                     ),
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      // TODO - To implement navigation to next screen
+                                    },
                                   ),
                                 ),
                               ],
@@ -121,18 +127,7 @@ class WelcomePageAndroid extends StatelessWidget {
                         ),
                       ),
                     ),
-                    Text(
-                      Strings.welcomePageFromFacebook,
-                      style:
-                          TextStyle(color: Color(AppColors.intermediateGray)),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 10.0, bottom: 25.0),
-                      child: Image(
-                        image: AssetImage('images/wordmarkupdate.png'),
-                        width: 90,
-                      ),
-                    )
+                    FacebookBrandContainer(),
                   ],
                 ),
               ),
