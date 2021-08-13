@@ -71,7 +71,7 @@ class WelcomePageAndroid extends StatelessWidget {
                                       TextSpan(
                                         text: Strings.welcomePagePrivacyPolicy,
                                         style: TextStyle(
-                                            color: Color(AppColors.blue)),
+                                            color: Color(AppColors.blueAndroid)),
                                         recognizer:
                                             _createGestureToOpenExternalLinkOnTextSpan(
                                                 context,
@@ -84,7 +84,7 @@ class WelcomePageAndroid extends StatelessWidget {
                                       TextSpan(
                                         text: Strings.welcomePageTermsOfService,
                                         style: TextStyle(
-                                            color: Color(AppColors.blue)),
+                                            color: Color(AppColors.blueAndroid)),
                                         recognizer:
                                             _createGestureToOpenExternalLinkOnTextSpan(
                                                 context,

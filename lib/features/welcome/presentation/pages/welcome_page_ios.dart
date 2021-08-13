@@ -70,7 +70,7 @@ class WelcomePageIos extends StatelessWidget {
                                       TextSpan(
                                         text: Strings.welcomePagePrivacyPolicy,
                                         style: TextStyle(
-                                            color: Color(AppColors.blue)),
+                                            color: Color(AppColors.blueIos)),
                                         recognizer:
                                             _createGestureToOpenExternalLinkOnTextSpan(
                                                 context,
@@ -83,7 +83,7 @@ class WelcomePageIos extends StatelessWidget {
                                       TextSpan(
                                         text: Strings.welcomePageTermsOfService,
                                         style: TextStyle(
-                                            color: Color(AppColors.blue)),
+                                            color: Color(AppColors.blueIos)),
                                         recognizer:
                                             _createGestureToOpenExternalLinkOnTextSpan(
                                                 context,
@@ -102,7 +102,7 @@ class WelcomePageIos extends StatelessWidget {
                                       Strings.welcomePageAgreeAndContinueIos,
                                       style: TextStyle(
                                         fontSize: 20.0,
-                                        color: Color(AppColors.blue),
+                                        color: Color(AppColors.blueIos),
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
