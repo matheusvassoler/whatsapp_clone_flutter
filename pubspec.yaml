@@ -28,6 +28,7 @@ dependencies:
   retrofit:
   logger:
   intl:
+  url_launcher:
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -39,6 +40,8 @@ dev_dependencies:
     sdk: flutter
   retrofit_generator:
   build_runner:
+  bloc_test:
+  mockito:
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -59,6 +62,8 @@ flutter:
      - images/b107f44d7bb7bf8abcf58afd9df500de.jpg
      - images/b107f44d7bb7bf8abcf58afd9df500de.png
      - images/chat_room_background.png
+     - images/whatsapp_welcome_screen_icon.png
+     - images/wordmarkupdate.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
