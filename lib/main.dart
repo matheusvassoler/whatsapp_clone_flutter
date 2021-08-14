@@ -1,11 +1,16 @@
 import 'dart:io';
 
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:whatsapp/features/welcome/presentation/pages/welcome_page_android.dart';
 import 'package:whatsapp/features/welcome/presentation/pages/welcome_page_ios.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp();
+
   runApp(Whatsapp());
 }
 
