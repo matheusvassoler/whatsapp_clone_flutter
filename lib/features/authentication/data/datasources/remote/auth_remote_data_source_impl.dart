@@ -1,15 +1,18 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:whatsapp/core/error/exceptions.dart';
+import 'package:whatsapp/core/error/exception.dart';
 import 'auth_remote_data_source.dart';
 
 const _invalidPhoneNumber = 'invalid-phone-number';
 
 class AuthRemoteDatSourceImpl implements AuthRemoteDataSource {
   String _verificationId = "";
+  final FirebaseAuth _auth;
+
+  AuthRemoteDatSourceImpl(this._auth);
 
   @override
   Future<void> verifyPhoneNumber(String phoneNumber) async {
-    await FirebaseAuth.instance.verifyPhoneNumber(
+    await _auth.verifyPhoneNumber(
         phoneNumber: phoneNumber,
         timeout:  const Duration(seconds: 0),
         verificationCompleted: (authCredential) =>
@@ -21,14 +24,24 @@ class AuthRemoteDatSourceImpl implements AuthRemoteDataSource {
             _codeAutoRetrievalTimeout(verificationId));
   }
 
-  Future<UserCredential> signInWithPhoneNumber(String smsCode) async {
+  @override
+  Future<void> signInWithPhoneNumber(String smsCode) async {
     try {
       final AuthCredential credential = PhoneAuthProvider.credential(
           verificationId: _verificationId, smsCode: smsCode);
 
-      return await FirebaseAuth.instance.signInWithCredential(credential);
+      await _auth.signInWithCredential(credential);
     } catch (e) {
       throw AuthenticationException();
+    }
+  }
+
+  @override
+  Future<void> signOut() async {
+    try {
+      await _auth.signOut();
+    } catch (e) {
+      throw SignOutException();
     }
   }
 
