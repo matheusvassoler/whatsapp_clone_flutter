@@ -1,7 +1,19 @@
+import 'package:hive/hive.dart';
+
+part 'contact_model.g.dart';
+
+@HiveType(typeId: 1)
 class ContactModel {
+  @HiveField(0)
   String phoneNumber;
+
+  @HiveField(1)
   String name;
+
+  @HiveField(2)
   String picture;
+
+  @HiveField(3)
   String deviceId;
 
   ContactModel({this.phoneNumber, this.name, this.picture, this.deviceId});

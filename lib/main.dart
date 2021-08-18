@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:whatsapp/features/authentication/data/models/contact_model.dart';
 import 'package:whatsapp/features/welcome/presentation/pages/welcome_page_android.dart';
 import 'package:whatsapp/features/welcome/presentation/pages/welcome_page_ios.dart';
 
@@ -10,6 +12,9 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp();
+
+  Hive.initFlutter();
+  Hive.registerAdapter(ContactModelAdapter());
 
   runApp(Whatsapp());
 }
