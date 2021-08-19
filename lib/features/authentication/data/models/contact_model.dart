@@ -1,28 +1,36 @@
 import 'package:hive/hive.dart';
+import 'package:whatsapp/features/authentication/domain/entities/contact.dart';
 
 part 'contact_model.g.dart';
 
 @HiveType(typeId: 1)
-class ContactModel {
+class ContactModel extends Contact {
   @HiveField(0)
-  String phoneNumber;
+  final String phoneNumber;
 
   @HiveField(1)
-  String name;
+  final String name;
 
   @HiveField(2)
-  String picture;
+  final String picture;
 
   @HiveField(3)
-  String deviceId;
+  final String deviceId;
 
-  ContactModel({this.phoneNumber, this.name, this.picture, this.deviceId});
+  ContactModel({this.phoneNumber, this.name, this.picture, this.deviceId})
+      : super(
+          phoneNumber: phoneNumber,
+          name: name,
+          picture: picture,
+          deviceId: deviceId,
+        );
 
-  ContactModel.fromJson(Map<String, dynamic> json) {
-    phoneNumber = json['phoneNumber'];
-    name = json['name'];
-    picture = json['picture'];
-    deviceId = json['deviceId'];
+  static ContactModel fromJson(Map<String, dynamic> json) {
+    return ContactModel(
+        phoneNumber: json['phoneNumber'],
+        name: json['name'],
+        picture: json['picture'],
+        deviceId: json['deviceId']);
   }
 
   Map<String, dynamic> toJson() {

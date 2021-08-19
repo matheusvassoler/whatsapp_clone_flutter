@@ -56,7 +56,7 @@ class AuthRemoteDatSourceImpl implements AuthRemoteDataSource {
 
   @override
   Future<void> storeContact(ContactModel contactModel) async {
-    final contactJson = jsonEncode(contactModel);
+    final contactJson = jsonEncode(contactModel.toJson());
     final response = await client.post(UriRequests.contact, data: contactJson);
     if(response.statusCode != _created && response.statusCode != _updated) {
       throw ServerException();

@@ -3,18 +3,31 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:whatsapp/core/error/exception.dart';
 import 'package:whatsapp/core/error/failure.dart';
+import 'package:whatsapp/features/authentication/data/datasources/local/auth_local_data_source.dart';
 import 'package:whatsapp/features/authentication/data/datasources/remote/auth_remote_data_source.dart';
+import 'package:whatsapp/features/authentication/data/models/contact_model.dart';
 import 'package:whatsapp/features/authentication/data/repositories/auth_repository_impl.dart';
+import 'package:whatsapp/features/authentication/domain/entities/contact.dart';
 
 class MockAuthRemoteDataSource extends Mock implements AuthRemoteDataSource {}
+class MockAuthLocalDataSource extends Mock implements AuthLocalDataSource {}
 
 main() {
   AuthRepositoryImpl repository;
   MockAuthRemoteDataSource mockAuthRemoteDataSource;
+  MockAuthLocalDataSource mockAuthLocalDataSource;
+  Contact contact;
+  ContactModel contactModel;
 
   setUp(() {
     mockAuthRemoteDataSource = MockAuthRemoteDataSource();
-    repository = AuthRepositoryImpl(authRemoteDataSource: mockAuthRemoteDataSource);
+    mockAuthLocalDataSource = MockAuthLocalDataSource();
+    contact = Contact(phoneNumber: '+5511911111111', name: 'Matheus', picture: 'assets/picture', deviceId: '545FBE');
+    contactModel = ContactModel(phoneNumber: '+5511911111111', name: 'Matheus', picture: 'assets/picture', deviceId: '545FBE');
+    repository = AuthRepositoryImpl(
+        authRemoteDataSource: mockAuthRemoteDataSource,
+        authLocalDataSource: mockAuthLocalDataSource
+    );
   });
 
   group('verifyPhoneNumber', () {
@@ -54,7 +67,7 @@ main() {
   group('signInWithPhoneNumber', () {
     String smsCode = "123456";
 
-    test('SHOULD return Unit value WHEN the credentials are valid', () async {
+    test('SHOULD return Unit value WHEN the credentials are valid AND store contact locally is succesfull', () async {
       // ARRANGE
       when(mockAuthRemoteDataSource.signInWithPhoneNumber(any)).thenAnswer((realInvocation) async => null);
       // ACT
@@ -94,6 +107,44 @@ main() {
       // ASSERT
       verify(mockAuthRemoteDataSource.signOut());
       expect(result, equals(Left(SignOutFailure())));
+    });
+  });
+
+  group('storeContact', () {
+    test('SHOULD return Unit value WHEN store contact in local and remote data source is successful', () async {
+      // ARRANGE
+      when(mockAuthRemoteDataSource.storeContact(any)).thenAnswer((realInvocation) async => null);
+      when(mockAuthLocalDataSource.storeContact(any)).thenAnswer((realInvocation) async => null);
+      // ACT
+      final result = await repository.storeContact(contact);
+      // ASSERT
+      verify(mockAuthRemoteDataSource.storeContact(contactModel));
+      verify(mockAuthLocalDataSource.storeContact(contactModel));
+      expect(result, equals(Right(Unit)));
+    });
+
+    test('SHOULD return DataSourceFailure WHEN store contact in local data source is successful, but in remote data source is failed', () async {
+      // ARRANGE
+      when(mockAuthRemoteDataSource.storeContact(any)).thenThrow(Exception());
+      when(mockAuthLocalDataSource.storeContact(any)).thenAnswer((realInvocation) async => null);
+      // ACT
+      final result = await repository.storeContact(contact);
+      // ASSERT
+      verify(mockAuthRemoteDataSource.storeContact(contactModel));
+      verifyNever(mockAuthLocalDataSource.storeContact(contactModel));
+      expect(result, equals(Left(DatasourceFailure())));
+    });
+
+    test('SHOULD return DataSourceFailure WHEN store contact in remote data source is successful, but in local data source is failed', () async {
+      // ARRANGE
+      when(mockAuthRemoteDataSource.storeContact(any)).thenAnswer((realInvocation) async => null);
+      when(mockAuthLocalDataSource.storeContact(any)).thenThrow(Exception());
+      // ACT
+      final result = await repository.storeContact(contact);
+      // ASSERT
+      verify(mockAuthRemoteDataSource.storeContact(contactModel));
+      verify(mockAuthLocalDataSource.storeContact(contactModel));
+      expect(result, equals(Left(DatasourceFailure())));
     });
   });
 }
