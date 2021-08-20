@@ -15,4 +15,7 @@ class Error extends AuthenticationState {
   final Failure failure;
 
   Error({@required this.failure});
+
+  @override
+  List<Object> get props => [failure];
 }

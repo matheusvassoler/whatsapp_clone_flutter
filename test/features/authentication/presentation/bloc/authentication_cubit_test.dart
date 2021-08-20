@@ -67,7 +67,7 @@ main() {
         // ARRANGE
         build: () => authenticationCubit,
         setUp: () {
-          when(mockVerifyPhoneNumber(any)).thenAnswer((realInvocation) async => Left(InvalidPhoneFailure()));
+          when(mockVerifyPhoneNumber(any)).thenAnswer((realInvocation) async => Left(ServerFailure()));
         },
         // ACT
         act: (cubit) => cubit.sendSmsCode(ddi, phoneNumber),
