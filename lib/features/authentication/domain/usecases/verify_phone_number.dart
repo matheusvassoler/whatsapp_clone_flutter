@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:whatsapp/core/error/failure.dart';
 import 'package:whatsapp/core/usecases/usecase.dart';
@@ -16,9 +17,12 @@ class VerifyPhoneNumber implements UseCase<void, Params> {
   }
 }
 
-class Params {
+class Params extends Equatable {
   final String ddi;
   final String phoneNumber;
 
   Params({@required this.ddi, @required this.phoneNumber});
+
+  @override
+  List<Object> get props => [ddi, phoneNumber];
 }

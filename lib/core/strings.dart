@@ -9,4 +9,6 @@ class Strings {
   static const welcomePageAgreeAndContinueAndroid = 'Concordar e continuar';
   static const welcomePageAgreeAndContinueIos = 'Concordar e Continuar';
   static const welcomePageFromFacebook = 'from';
+
+  static const authenticationPageInvalidPhoneNumber = "O número de telefone que você inseriu é inválido";
 }
