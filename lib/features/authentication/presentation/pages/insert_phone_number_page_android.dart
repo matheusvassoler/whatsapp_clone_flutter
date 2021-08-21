@@ -99,22 +99,24 @@ class _InsertPhoneNumberPageAndroidState
                             controller: _ddiController,
                             textAlign: TextAlign.center,
                             decoration: InputDecoration(
-                                isDense: true,
-                                contentPadding:
-                                    EdgeInsets.only(left: 0.0, bottom: 5.0),
-                                focusedBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(
-                                    width: 2.0,
-                                    color: Theme.of(context).primaryColor,
-                                  ),
-                                ),
-                                enabledBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide(
+                              isDense: true,
+                              contentPadding:
+                                  EdgeInsets.only(left: 0.0, bottom: 5.0),
+                              focusedBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                  width: 2.0,
                                   color: Theme.of(context).primaryColor,
-                                )),
-                                prefixIcon: Icon(Icons.add),
-                                prefixIconConstraints:
-                                    BoxConstraints(minWidth: 0, minHeight: 0)),
+                                ),
+                              ),
+                              enabledBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Theme.of(context).primaryColor,
+                                ),
+                              ),
+                              prefixIcon: Icon(Icons.add),
+                              prefixIconConstraints:
+                                  BoxConstraints(minWidth: 0, minHeight: 0),
+                            ),
                           ),
                         ),
                         SizedBox(
@@ -151,8 +153,7 @@ class _InsertPhoneNumberPageAndroidState
                     child: Text(
                       "Sujeita a cobranças de tarifas de SMS de sua operadora",
                       style: TextStyle(
-                        color: Color(AppColors.intermediateDarkGray)
-                      ),
+                          color: Color(AppColors.intermediateDarkGray)),
                     ),
                   ),
                   Expanded(
