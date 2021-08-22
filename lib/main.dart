@@ -4,9 +4,11 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:whatsapp/core/app_colors.dart';
 import 'package:whatsapp/features/authentication/data/models/contact_model.dart';
-import 'package:whatsapp/features/welcome/presentation/pages/welcome_page_android.dart';
+import 'package:whatsapp/features/authentication/presentation/pages/insert_phone_number_page_android.dart';
 import 'package:whatsapp/features/welcome/presentation/pages/welcome_page_ios.dart';
+import 'package:whatsapp/injection_contanier.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -15,6 +17,8 @@ void main() async {
 
   Hive.initFlutter();
   Hive.registerAdapter(ContactModelAdapter());
+
+  setupDi();
 
   runApp(Whatsapp());
 }
@@ -30,8 +34,12 @@ class Whatsapp extends StatelessWidget {
           primaryColor: Color(0xFF128C7E),
           accentColor: Color(0xFF25D366),
           indicatorColor: Colors.white,
+          hintColor: Color(AppColors.intermediateGray.toInt()),
+          textSelectionTheme: TextSelectionThemeData(
+            cursorColor: Color(0xFF128C7E),
+          ),
         ),
-        home: WelcomePageAndroid(),
+        home: InsertPhoneNumberPageAndroid(),
       );
     } else {
       return CupertinoApp(

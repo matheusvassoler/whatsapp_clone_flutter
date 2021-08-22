@@ -12,7 +12,7 @@ class VerifyPhoneNumber implements UseCase<void, Params> {
 
   @override
   Future<Either<Failure, void>> call(params) async {
-    final phoneNumber = params.ddi + params.phoneNumber;
+    final phoneNumber = "+" + params.ddi + params.phoneNumber;
     return await _authRepository.verifyPhoneNumber(phoneNumber);
   }
 }

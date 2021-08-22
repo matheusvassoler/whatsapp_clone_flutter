@@ -17,24 +17,25 @@ class _InsertPhoneNumberPageAndroidState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          shadowColor: Colors.transparent,
-          backgroundColor: Colors.white,
-          centerTitle: true,
-          title: Text(
-            "Insira seu número de telefone",
-            style: TextStyle(color: Theme.of(context).primaryColor),
-          ),
-          actions: [
-            IconButton(
-              color: Color(AppColors.intermediateDarkGray),
-              onPressed: () => {},
-              icon: Icon(Icons.more_vert),
-            )
-          ],
+      appBar: AppBar(
+        shadowColor: Colors.transparent,
+        backgroundColor: Colors.white,
+        centerTitle: true,
+        title: Text(
+          "Insira seu número de telefone",
+          style: TextStyle(color: Theme.of(context).primaryColor),
         ),
-        backgroundColor: Color(Colors.white.value),
-        body: buildBody(context));
+        actions: [
+          IconButton(
+            color: Color(AppColors.intermediateDarkGray),
+            onPressed: () => {},
+            icon: Icon(Icons.more_vert),
+          )
+        ],
+      ),
+      backgroundColor: Color(Colors.white.value),
+      body: buildBody(context),
+    );
   }
 
   BlocProvider<AuthenticationCubit> buildBody(context) {
@@ -66,6 +67,7 @@ class _InsertPhoneNumberPageAndroidState
                           ? _mediaQuery.size.width * 0.65
                           : _mediaQuery.size.width * 0.4,
                       child: TextField(
+                        showCursor: false,
                         controller: _countryController,
                         textAlign: TextAlign.center,
                         decoration: InputDecoration(
@@ -91,44 +93,57 @@ class _InsertPhoneNumberPageAndroidState
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        SizedBox(
-                          width: _mediaQuery.orientation == Orientation.portrait
-                              ? _mediaQuery.size.width * 0.2
-                              : _mediaQuery.size.width * 0.10,
-                          child: TextField(
-                            controller: _ddiController,
-                            textAlign: TextAlign.center,
-                            decoration: InputDecoration(
-                              isDense: true,
-                              contentPadding:
-                                  EdgeInsets.only(left: 0.0, bottom: 5.0),
-                              focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                  width: 2.0,
-                                  color: Theme.of(context).primaryColor,
-                                ),
+                        Stack(
+                          clipBehavior: Clip.none,
+                          children: [
+                            Positioned(
+                              child: Icon(
+                                Icons.add,
+                                color: Color(AppColors.intermediateGray),
+                                size: 15,
                               ),
-                              enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: Theme.of(context).primaryColor,
-                                ),
-                              ),
-                              prefixIcon: Icon(Icons.add),
-                              prefixIconConstraints:
-                                  BoxConstraints(minWidth: 0, minHeight: 0),
+                              top: 3,
+                              left: -2,
                             ),
-                          ),
+                            SizedBox(
+                              width: _mediaQuery.orientation ==
+                                      Orientation.portrait
+                                  ? _mediaQuery.size.width * 0.18
+                                  : _mediaQuery.size.width * 0.10,
+                              child: TextField(
+                                controller: _ddiController,
+                                textAlign: TextAlign.center,
+                                decoration: InputDecoration(
+                                  isDense: true,
+                                  contentPadding:
+                                      EdgeInsets.only(left: 30.0, bottom: 5.0),
+                                  focusedBorder: UnderlineInputBorder(
+                                    borderSide: BorderSide(
+                                      width: 2.0,
+                                      color: Theme.of(context).primaryColor,
+                                    ),
+                                  ),
+                                  enabledBorder: UnderlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: Theme.of(context).primaryColor,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                         SizedBox(
                           width: 15.0,
                         ),
                         SizedBox(
                           width: _mediaQuery.orientation == Orientation.portrait
-                              ? _mediaQuery.size.width * 0.41
+                              ? _mediaQuery.size.width * 0.43
                               : _mediaQuery.size.width * 0.28,
                           child: TextField(
                             controller: _phoneNumberController,
                             decoration: InputDecoration(
+                              hintText: "seu número",
                               isDense: true,
                               contentPadding: EdgeInsets.only(bottom: 5.0),
                               focusedBorder: UnderlineInputBorder(

@@ -31,11 +31,14 @@ dependencies:
   url_launcher:
   firebase_core:
   firebase_auth:
+  cloud_firestore:
   dartz:
   equatable:
   hive:
   hive_flutter:
   path_provider:
+  get_it:
+  country_icons:
 
 
   # The following adds the Cupertino Icons font to your application.

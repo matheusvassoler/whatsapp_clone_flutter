@@ -4,4 +4,5 @@ class AppColors {
   static const blueIos = 0xFF007AFF;
   static const lightGray = 0xFFECE5DD;
   static const intermediateGray = 0xFF93979A;
+  static const intermediateDarkGray = 0xFF757575;
 }

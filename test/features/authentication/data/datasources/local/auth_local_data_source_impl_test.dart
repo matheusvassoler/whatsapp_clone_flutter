@@ -16,7 +16,7 @@ main() {
   setUp(() {
     mockHive = MockHive();
     mockHiveBox = MockHiveBox();
-    authLocalDataSourceImpl = AuthLocalDataSourceImpl(mockHive);
+    authLocalDataSourceImpl = AuthLocalDataSourceImpl(hive: mockHive);
     contactModel = ContactModel(phoneNumber: '+5511911111111', name: 'Matheus', picture: 'assets/picture', deviceId: '545FBE');
   });
 

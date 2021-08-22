@@ -1,6 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="br.com.whatsapp.whatsapp">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <queries>
         <intent>
             <action android:name="android.intent.action.VIEW" />
@@ -10,6 +12,7 @@
 
    <application
         android:label="whatsapp"
+        android:usesCleartextTraffic="true"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

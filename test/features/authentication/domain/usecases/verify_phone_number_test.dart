@@ -15,7 +15,7 @@ void main() {
     verifyPhoneNumber = VerifyPhoneNumber(mockAuthRepository);
   });
 
-  final ddi = "+55";
+  final ddi = "55";
   final phoneNumber = "19911111111";
 
   test('SHOULD verify phone number from the repository', () async {
