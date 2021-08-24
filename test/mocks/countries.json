@@ -1,0 +1,42 @@
+[
+  {
+    "translations": {
+      "br": "Afeganistão",
+      "pt": "Afeganistão",
+      "nl": "Afghanistan",
+      "hr": "Afganistan",
+      "fa": "افغانستان",
+      "de": "Afghanistan",
+      "es": "Afganistán",
+      "fr": "Afghanistan",
+      "ja": "アフガニスタン",
+      "it": "Afghanistan"
+    },
+    "flag": "https://restcountries.eu/data/afg.svg",
+    "name": "Afghanistan",
+    "callingCodes": [
+      "93"
+    ],
+    "nativeName": "افغانستان"
+  },
+  {
+    "translations": {
+      "br": "Ilhas de Aland",
+      "pt": "Ilhas de Aland",
+      "nl": "Ålandeilanden",
+      "hr": "Ålandski otoci",
+      "fa": "جزایر الند",
+      "de": "Åland",
+      "es": "Alandia",
+      "fr": "Åland",
+      "ja": "オーランド諸島",
+      "it": "Isole Aland"
+    },
+    "flag": "https://restcountries.eu/data/ala.svg",
+    "name": "Åland Islands",
+    "callingCodes": [
+      "358"
+    ],
+    "nativeName": "Åland"
+  }
+]
