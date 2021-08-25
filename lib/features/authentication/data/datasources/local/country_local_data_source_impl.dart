@@ -13,4 +13,10 @@ class CountryLocalDataSourceImpl implements CountryLocalDataSource {
     final countriesBox = await hive.openBox('countries');
     countriesBox.put('countries_list', countries);
   }
+
+  @override
+  Future<List<CountryModelLocal>> getCountries() async {
+    final countriesBox = await hive.openBox('countries');
+    return countriesBox.get('countries_list');
+  }
 }

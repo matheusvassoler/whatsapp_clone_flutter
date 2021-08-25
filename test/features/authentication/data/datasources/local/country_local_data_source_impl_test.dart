@@ -18,9 +18,10 @@ main() {
     countryLocalDataSourceImpl = CountryLocalDataSourceImpl(hive: mockHive);
   });
 
+  final countries = [CountryModelLocal(), CountryModelLocal()];
+
   test('SHOULD store countries locally', () async {
     // ARRANGE
-    final countries = [CountryModelLocal(), CountryModelLocal()];
     when(mockHive.openBox(any)).thenAnswer((realInvocation) async => mockHiveBox);
     when(mockHiveBox.put(any, any)).thenAnswer((realInvocation) => null);
     // ACT
@@ -28,5 +29,17 @@ main() {
     // ASSERT
     verify(mockHive.openBox('countries'));
     verify(mockHiveBox.put('countries_list', countries));
+  });
+
+  test('SHOULD get countries locally', () async {
+    // ARRANGE
+    when(mockHive.openBox(any)).thenAnswer((realInvocation) async => mockHiveBox);
+    when(mockHiveBox.get(any)).thenAnswer((realInvocation) => countries);
+    // ACT
+    final result = await countryLocalDataSourceImpl.getCountries();
+    // ASSERT
+    expect(result, countries);
+    verify(mockHive.openBox('countries'));
+    verify(mockHiveBox.get('countries_list'));
   });
 }
