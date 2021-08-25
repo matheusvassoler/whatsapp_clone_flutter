@@ -1,10 +1,10 @@
-import 'package:equatable/equatable.dart';
 import 'package:hive/hive.dart';
+import 'package:whatsapp/features/authentication/domain/entities/translation.dart';
 
 part 'translation_model.g.dart';
 
 @HiveType(typeId: 3)
-class TranslationModel extends Equatable {
+class TranslationModel extends Translation {
   @HiveField(0)
   final String br;
 
@@ -46,7 +46,7 @@ class TranslationModel extends Equatable {
     this.fr,
     this.ja,
     this.it,
-  });
+  }) : super(br, pt, nl, hr, fa, de, es, fr, ja, it);
 
   static TranslationModel fromJson(Map<String, dynamic> json) {
     return TranslationModel(
@@ -77,7 +77,4 @@ class TranslationModel extends Equatable {
     data['it'] = this.it;
     return data;
   }
-
-  @override
-  List<Object> get props => [br];
 }

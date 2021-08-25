@@ -29,4 +29,15 @@ class CountryRemoteDataSourceImpl implements CountryRemoteDataSource {
       throw ServerException();
     }
   }
+
+  @override
+  Future<List<int>> getCountryFlag(String url) async {
+    final Response response = await client.get(url, options: Options(responseType: ResponseType.bytes));
+
+    if(response.statusCode == _responseStatusOk) {
+      return response.data;
+    } else {
+      throw ServerException();
+    }
+  }
 }

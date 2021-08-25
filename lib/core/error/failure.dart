@@ -10,3 +10,4 @@ class AuthenticationFailure extends Failure {}
 class InvalidPhoneFailure extends Failure {}
 class SignOutFailure extends Failure {}
 class DatasourceFailure extends Failure {}
+class InternalFailure extends Failure {}

@@ -20,29 +20,55 @@ main() {
     mockDioClient = MockDioClient();
     countryRemoteDataSourceImpl = CountryRemoteDataSourceImpl(client: mockDioClient);
   });
-  
-  test('SHOULD get countries list WHEN the response code is 200', () async {
-    // ARRANGE
-    when(mockDioClient.get(any, queryParameters: anyNamed('queryParameters')))
-        .thenAnswer((realInvocation) async =>
-        Response(data: mock('countries.json'), statusCode: 200, requestOptions: RequestOptions(path: "")));
-    final List<dynamic> parsedData = jsonDecode(mock('countries.json'));
-    final expectedResult = parsedData.map((e) => CountryModel.fromJson(e)).toList();
-    // ACT
-    final result = await countryRemoteDataSourceImpl.getCountries();
-    // ASSERT
-    expect(result, expectedResult);
-    verify(mockDioClient.get(UriRequests.countries, queryParameters: {'fields': 'name;translations;nativeName;flag;callingCodes'}));
+
+  group('getCountries', () {
+    test('SHOULD get countries list WHEN the response code is 200', () async {
+      // ARRANGE
+      when(mockDioClient.get(any, queryParameters: anyNamed('queryParameters')))
+          .thenAnswer((realInvocation) async =>
+          Response(data: mock('countries.json'), statusCode: 200, requestOptions: RequestOptions(path: "")));
+      final List<dynamic> parsedData = jsonDecode(mock('countries.json'));
+      final expectedResult = parsedData.map((e) => CountryModel.fromJson(e)).toList();
+      // ACT
+      final result = await countryRemoteDataSourceImpl.getCountries();
+      // ASSERT
+      expect(result, expectedResult);
+      verify(mockDioClient.get(UriRequests.countries, queryParameters: {'fields': 'name;translations;nativeName;flag;callingCodes'}));
+    });
+
+    test('SHOULD throw ServerException WHEN the response code is different of 200', () async {
+      // ARRANGE
+      when(mockDioClient.get(any, queryParameters: anyNamed('queryParameters')))
+          .thenAnswer((realInvocation) async =>
+          Response(data: [], statusCode: 404, requestOptions: RequestOptions(path: "")));
+      // ACT
+      final call = countryRemoteDataSourceImpl.getCountries;
+      // ASSERT
+      expect(call(), throwsA(TypeMatcher<ServerException>()));
+    });
   });
 
-  test('SHOULD throw ServerException WHEN the response code is different of 200', () async {
-    // ARRANGE
-    when(mockDioClient.get(any, queryParameters: anyNamed('queryParameters')))
-        .thenAnswer((realInvocation) async =>
-        Response(data: [], statusCode: 404, requestOptions: RequestOptions(path: "")));
-    // ACT
-    final call = countryRemoteDataSourceImpl.getCountries;
-    // ASSERT
-    expect(call(), throwsA(TypeMatcher<ServerException>()));
+  group('getCountryFlag', () {
+    test('SHOULD return country flag WHEN the response code is 200', () async {
+      // ARRANGE
+      when(mockDioClient.get(any, options: anyNamed('options')))
+          .thenAnswer((realInvocation) async =>
+          Response(data: [0, 0, 0], statusCode: 200, requestOptions: RequestOptions(path: "")));
+      // ACT
+      final result = await countryRemoteDataSourceImpl.getCountryFlag('url');
+      // ASSERT
+      expect(result, [0, 0, 0]);
+    });
+
+    test('SHOULD throw ServerException WHEN the response code is different of 200', () async {
+      // ARRANGE
+      when(mockDioClient.get(any, options: anyNamed('options')))
+          .thenAnswer((realInvocation) async =>
+          Response(data: [], statusCode: 404, requestOptions: RequestOptions(path: "")));
+      // ACT
+      final call = countryRemoteDataSourceImpl.getCountryFlag;
+      // ASSERT
+      expect(call("url"), throwsA(TypeMatcher<ServerException>()));
+    });
   });
 }
