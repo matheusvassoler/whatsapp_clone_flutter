@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:whatsapp/features/authentication/data/models/translation.dart';
+import 'package:whatsapp/features/authentication/data/models/translation_model.dart';
 
 class CountryModel extends Equatable {
   final TranslationModel translations;
