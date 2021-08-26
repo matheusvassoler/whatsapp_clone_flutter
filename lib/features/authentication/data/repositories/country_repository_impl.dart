@@ -22,44 +22,44 @@ class CountryRepositoryImpl implements CountryRepository {
   Future<Either<Failure, List<Country>>> getCountries() async {
     try {
       final countries = await countryLocalDataSource.getCountries();
-      return Right(countries);
+      if (countries.length == 250) {
+        return Right(countries);
+      } else {
+        final countries = await storeCountries();
+        Right(countries);
+      }
     } catch(e) {
       return Left(InternalFailure());
     }
   }
 
-  @override
-  Future<Either<Failure, void>> storeCountries() async {
-    try {
-      final countries = await countryRemoteDataSource.getCountries();
-      final directory = await getApplicationDocumentsDirectory();
-      final documentsDirectoryPath = directory.path;
-      final countriesList = [];
+  Future<List<Country>> storeCountries() async {
+    final countries = await countryRemoteDataSource.getCountries();
+    final directory = await getApplicationDocumentsDirectory();
+    final documentsDirectoryPath = directory.path;
+    final countriesList = [];
 
-      countries.forEach((country) async {
-        final imagePath = '$documentsDirectoryPath/${countries[0].name}';
-        final file = File(imagePath);
-        final flag =
-            await countryRemoteDataSource.getCountryFlag(countries[0].flag);
-        file.writeAsBytes(flag);
+    countries.forEach((country) async {
+      final imagePath = '$documentsDirectoryPath/${countries[0].name}';
+      final file = File(imagePath);
+      final flag =
+          await countryRemoteDataSource.getCountryFlag(countries[0].flag);
+      file.writeAsBytes(flag);
 
-        final countryModelLocal = CountryModelLocal(
-          translations: country.translations,
-          flag: country.flag,
-          name: country.name,
-          internationalCallingCodes: country.internationalCallingCodes,
-          nativeName: country.nativeName,
-          path: imagePath,
-        );
+      final countryModelLocal = CountryModelLocal(
+        translations: country.translations,
+        flag: country.flag,
+        name: country.name,
+        internationalCallingCodes: country.internationalCallingCodes,
+        nativeName: country.nativeName,
+        path: imagePath,
+      );
 
-        countriesList.add(countryModelLocal);
-      });
+      countriesList.add(countryModelLocal);
+    });
 
-      countryLocalDataSource.storeCountries(countriesList);
+    countryLocalDataSource.storeCountries(countriesList);
 
-      return Right(Unit);
-    } catch (e) {
-      return Left(ServerFailure());
-    }
+    return countriesList;
   }
 }
