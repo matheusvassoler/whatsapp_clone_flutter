@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:whatsapp/core/app_colors.dart';
 import 'package:whatsapp/features/authentication/data/models/contact_model.dart';
+import 'package:whatsapp/features/authentication/data/models/country_model_local.dart';
+import 'package:whatsapp/features/authentication/data/models/translation_model.dart';
 import 'package:whatsapp/features/authentication/presentation/pages/insert_phone_number_page_android.dart';
 import 'package:whatsapp/features/welcome/presentation/pages/welcome_page_ios.dart';
 import 'package:whatsapp/injection_contanier.dart';
@@ -17,6 +19,8 @@ void main() async {
 
   Hive.initFlutter();
   Hive.registerAdapter(ContactModelAdapter());
+  Hive.registerAdapter(CountryModelLocalAdapter());
+  Hive.registerAdapter(TranslationModelAdapter());
 
   setupDi();
 

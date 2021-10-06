@@ -7,13 +7,16 @@ class CountryModel extends Equatable {
   final String name;
   final List<String> internationalCallingCodes;
   final String nativeName;
+  final String abbreviation;
 
-  CountryModel(
-      {this.translations,
-      this.flag,
-      this.name,
-      this.internationalCallingCodes,
-      this.nativeName});
+  CountryModel({
+    this.translations,
+    this.flag,
+    this.name,
+    this.internationalCallingCodes,
+    this.nativeName,
+    this.abbreviation,
+  });
 
   static CountryModel fromJson(Map<String, dynamic> json) {
     return CountryModel(
@@ -23,7 +26,8 @@ class CountryModel extends Equatable {
         flag: json['flag'],
         name: json['name'],
         internationalCallingCodes: json['callingCodes'].cast<String>(),
-        nativeName: json['nativeName']);
+        nativeName: json['nativeName'],
+        abbreviation: json['alpha2Code']);
   }
 
   Map<String, dynamic> toJson() {
@@ -35,6 +39,7 @@ class CountryModel extends Equatable {
     data['name'] = this.name;
     data['callingCodes'] = this.internationalCallingCodes;
     data['nativeName'] = this.nativeName;
+    data['alpha2Code'] = this.abbreviation;
     return data;
   }
 

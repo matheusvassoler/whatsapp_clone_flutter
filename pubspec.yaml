@@ -39,6 +39,8 @@ dependencies:
   path_provider:
   get_it:
   country_icons:
+  flutter_svg:
+  mask_text_input_formatter:
 
 
   # The following adds the Cupertino Icons font to your application.

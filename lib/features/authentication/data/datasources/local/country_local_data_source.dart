@@ -2,5 +2,5 @@ import 'package:whatsapp/features/authentication/data/models/country_model_local
 
 abstract class CountryLocalDataSource {
   Future<void> storeCountries(List<CountryModelLocal> countries);
-  Future<List<CountryModelLocal>> getCountries();
+  Future<List<dynamic>> getCountries();
 }

@@ -15,7 +15,7 @@ class CountryLocalDataSourceImpl implements CountryLocalDataSource {
   }
 
   @override
-  Future<List<CountryModelLocal>> getCountries() async {
+  Future<List<dynamic>> getCountries() async {
     final countriesBox = await hive.openBox('countries');
     return countriesBox.get('countries_list');
   }

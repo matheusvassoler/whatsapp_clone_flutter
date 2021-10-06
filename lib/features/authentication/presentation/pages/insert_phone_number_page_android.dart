@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:whatsapp/core/app_colors.dart';
 import 'package:whatsapp/features/authentication/presentation/cubit/authentication_cubit.dart';
+import 'package:whatsapp/features/authentication/presentation/cubit/country_cubit.dart';
+import 'package:whatsapp/features/authentication/presentation/pages/country_selector.dart';
+import 'package:whatsapp/features/welcome/presentation/widgets/triangle_open_selector.dart';
 import 'package:whatsapp/injection_contanier.dart';
 
 class InsertPhoneNumberPageAndroid extends StatefulWidget {
-  const InsertPhoneNumberPageAndroid({Key key}) : super(key: key);
+  InsertPhoneNumberPageAndroid({Key key}) : super(key: key);
 
   @override
   _InsertPhoneNumberPageAndroidState createState() =>
@@ -14,6 +19,12 @@ class InsertPhoneNumberPageAndroid extends StatefulWidget {
 
 class _InsertPhoneNumberPageAndroidState
     extends State<InsertPhoneNumberPageAndroid> {
+  final TextEditingController phoneNumberController = TextEditingController();
+  final maskFormatter = MaskTextInputFormatter(
+      mask: '## #####-####', filter: {"#": RegExp(r'[0-9]')});
+  final countryController = TextEditingController()..text = "Brasil";
+  final ddiController = TextEditingController()..text = "55";
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,12 +49,8 @@ class _InsertPhoneNumberPageAndroidState
     );
   }
 
-  BlocProvider<AuthenticationCubit> buildBody(context) {
+  BlocProvider buildBody(context) {
     final _mediaQuery = MediaQuery.of(context);
-    final _countryController = TextEditingController()..text = "Brasil";
-    final _ddiController = TextEditingController();
-    final _phoneNumberController = TextEditingController();
-
     return BlocProvider(
       create: (_) => getIt<AuthenticationCubit>(),
       child: Builder(builder: (BuildContext context) {
@@ -62,30 +69,66 @@ class _InsertPhoneNumberPageAndroidState
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 15.0),
-                    child: SizedBox(
-                      width: _mediaQuery.orientation == Orientation.portrait
-                          ? _mediaQuery.size.width * 0.65
-                          : _mediaQuery.size.width * 0.4,
-                      child: TextField(
-                        showCursor: false,
-                        controller: _countryController,
-                        textAlign: TextAlign.center,
-                        decoration: InputDecoration(
-                          isDense: true,
-                          contentPadding: EdgeInsets.only(bottom: 5.0),
-                          focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(
-                              width: 2.0,
-                              color: Theme.of(context).primaryColor,
+                    child: Stack(
+                      clipBehavior: Clip.none,
+                      children: [
+                        SizedBox(
+                          width: _mediaQuery.orientation == Orientation.portrait
+                              ? _mediaQuery.size.width * 0.65
+                              : _mediaQuery.size.width * 0.4,
+                          child: TextField(
+                            readOnly: true,
+                            showCursor: false,
+                            controller: countryController,
+                            textAlign: TextAlign.center,
+                            decoration: InputDecoration(
+                              isDense: true,
+                              contentPadding: EdgeInsets.only(bottom: 5.0),
+                              focusedBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                  width: 2.0,
+                                  color: Theme.of(context).primaryColor,
+                                ),
+                              ),
+                              enabledBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Theme.of(context).primaryColor,
+                                ),
+                              ),
                             ),
-                          ),
-                          enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Theme.of(context).primaryColor,
-                            ),
+                            onTap: () async {
+                              // COLOCAR DENTRO DE UM METODO
+                              final result = await Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) {
+                                    return CountrySelector();
+                                  },
+                                ),
+                              );
+                              if (result != null) {
+                                countryController.text = result[0];
+                                ddiController.text = result[1];
+                              }
+                            },
                           ),
                         ),
-                      ),
+                        Positioned(
+                          top: 5,
+                          right: 5,
+                          child: ClipPath(
+                            clipper: TriangleClipper(),
+                            child: SizedBox(
+                              child: DecoratedBox(
+                                decoration: BoxDecoration(
+                                    color: Theme.of(context).primaryColor),
+                              ),
+                              width: 12,
+                              height: 7,
+                            ),
+                          ),
+                        )
+                      ],
                     ),
                   ),
                   Padding(
@@ -111,7 +154,8 @@ class _InsertPhoneNumberPageAndroidState
                                   ? _mediaQuery.size.width * 0.18
                                   : _mediaQuery.size.width * 0.10,
                               child: TextField(
-                                controller: _ddiController,
+                                readOnly: true,
+                                controller: ddiController,
                                 textAlign: TextAlign.center,
                                 decoration: InputDecoration(
                                   isDense: true,
@@ -141,7 +185,9 @@ class _InsertPhoneNumberPageAndroidState
                               ? _mediaQuery.size.width * 0.43
                               : _mediaQuery.size.width * 0.28,
                           child: TextField(
-                            controller: _phoneNumberController,
+                            inputFormatters: [maskFormatter],
+                            keyboardType: TextInputType.number,
+                            controller: phoneNumberController,
                             decoration: InputDecoration(
                               hintText: "seu número",
                               isDense: true,
@@ -180,8 +226,8 @@ class _InsertPhoneNumberPageAndroidState
                           height: 40,
                           child: ElevatedButton(
                             onPressed: () {
-                              final ddi = _ddiController.text;
-                              final phoneNumber = _phoneNumberController.text;
+                              final ddi = ddiController.text;
+                              final phoneNumber = phoneNumberController.text;
                               context
                                   .read<AuthenticationCubit>()
                                   .sendSmsCode(ddi, phoneNumber);

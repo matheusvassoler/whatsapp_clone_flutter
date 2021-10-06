@@ -7,7 +7,7 @@ import 'package:whatsapp/features/authentication/data/datasources/remote/country
 import 'package:whatsapp/features/authentication/data/datasources/uri_requests.dart';
 import 'package:whatsapp/features/authentication/data/models/country_model.dart';
 
-const _valueForParamFields = 'name;translations;nativeName;flag;callingCodes';
+const _valueForParamFields = 'name;translations;nativeName;flag;callingCodes;alpha2Code';
 const _responseStatusOk = 200;
 
 class CountryRemoteDataSourceImpl implements CountryRemoteDataSource {
@@ -16,17 +16,16 @@ class CountryRemoteDataSourceImpl implements CountryRemoteDataSource {
   CountryRemoteDataSourceImpl({@required this.client});
 
   @override
-  Future<List<CountryModel>> getCountries() async {
+  Future<List<dynamic>> getCountries() async {
     final response = await client.get(UriRequests.countries, queryParameters: {'fields': _valueForParamFields});
     return getDataIfResponseIsSuccessful(response);
   }
 
-  List<CountryModel> getDataIfResponseIsSuccessful(Response response) {
+  List<dynamic> getDataIfResponseIsSuccessful(Response response) {
     if (response.statusCode == _responseStatusOk) {
-      final List<dynamic> parsedData = jsonDecode(response.data) as List<dynamic>;
-      return parsedData.map((e) => CountryModel.fromJson(e)).toList();
-    } else {
-      throw ServerException();
+      //final parsedData = jsonDecode(response.data);
+      final a = response.data.map((e) => CountryModel.fromJson(e)).toList();
+      return a;
     }
   }
 

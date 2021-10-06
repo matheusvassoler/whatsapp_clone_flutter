@@ -22,7 +22,10 @@ class CountryModelLocal extends Country {
   final String nativeName;
 
   @HiveField(5)
-  final String path;
+  final String countryEmoji;
+
+  @HiveField(6)
+  final String abbreviation;
 
   CountryModelLocal({
     this.translations,
@@ -30,13 +33,15 @@ class CountryModelLocal extends Country {
     this.name,
     this.internationalCallingCodes,
     this.nativeName,
-    this.path,
+    this.countryEmoji,
+    this.abbreviation,
   }) : super(
           translations,
           flag,
           name,
           internationalCallingCodes,
           nativeName,
-          path,
+          countryEmoji,
+          abbreviation
         );
 }

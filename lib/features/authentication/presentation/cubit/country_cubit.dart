@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:whatsapp/core/usecases/usecase.dart';
@@ -15,9 +17,15 @@ class CountryCubit extends Cubit<CountryState> {
     emit(LoadingCountries());
 
     final failureOrSuccess = await _getCountries(NoParams());
-    failureOrSuccess.fold(
-      (failure) => emit(CountriesLoadingError()),
-      (countries) => emit(CountriesLoaded(countries)),
-    );
+    failureOrSuccess.fold((failure) => emit(CountriesLoadingError()),
+        (countries) async {
+      emit(CountriesLoaded(countries));
+    });
+  }
+
+  void sortListForBrazilianPortuguese(List<Country> countries) {
+    countries.sort((a, b) {
+      return a.translations.br.toLowerCase().compareTo(b.translations.br.toLowerCase());
+    });
   }
 }
